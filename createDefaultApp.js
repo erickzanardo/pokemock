@@ -17,7 +17,7 @@ function createDefaultApp( apis, options ) {
 
   var customGenerators = options.customGenerators ?
     options.customGenerators.map(function(generator) {
-      return generate2.custom(generator.pattern, generator.fn);
+      return generate2.custom(generator.matcher, generator.fn);
     }) : [];
 
   var mocks = customGenerators.concat([
