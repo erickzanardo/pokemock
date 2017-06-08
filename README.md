@@ -81,7 +81,6 @@ such as:
 These actions are applied to known entities in memory.
 For example, requesting a deleted entity will result in a 404 response.
 
-
 ## Customization
 
 Pokemock provides a set of [Express](http://expressjs.com/de/) middlewares
@@ -90,3 +89,24 @@ The default app defined in `createDefaultApp.js` is an opinionated stack of
 middlewares which you're encouraged to hack on.
 By re-arranging and adding middlewares (especially generators)
 you can tailor Pokemock to fit your APIs.
+
+## Custom generators
+
+Custom generators are a way to customize pokemock, without hack its middlewares, to use it you can pass a flag `--require-generators "ABSOLUTE_PATH_TO_YOUR_CUSTOM_GENERATORS_FILE", or if you are using `createDefaultApp` you should pass your custom generators on the option `customGenerators`.
+
+Your custom generators module must export an array of custom generators which must has the following structure:
+
+`matcher`: The field matcher, it can be a regexp or a function, the function will receive the name and schema of the current field, and you should return true or false
+`fn`: The function that will generate the value for the field, it receives as args the name of the field, its schema and an pokemock option object.
+
+An custom generators file example:
+
+```
+module.exports = [{
+  matcher: /someField/,
+  fn: () => generateSomeRandomValue(),
+}, {
+  matcher: (name, schema) name == "someOtherField" && schema.type == "array",
+  fn: () => generateSomeRandomArray(),
+}]
+```
